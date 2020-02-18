@@ -5,17 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class TargetSpawner : MonoBehaviour
 {
+    
     // Start is called before the first frame update
     [Header("Set in Insepector")]
     public GameObject targetPrefab;
     public float delay;
     public GameObject BackWall;
     public int MaxTargetsOnScreen;
-    private List<GameObject> targetList;
+    public List<GameObject> targetList;
 
     private float WallX = 14f;
     private float WallY = 8f;
-    
+    private int targetNum = 0;
 
     private float z = -0.5f;
     void Start()
@@ -27,7 +28,10 @@ public class TargetSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        if (targetList.Count >= MaxTargetsOnScreen)
+        {
+            SceneManager.LoadScene("Scene_0");
+        }
     }
 
     private void FixedUpdate()
@@ -38,6 +42,8 @@ public class TargetSpawner : MonoBehaviour
     public void SpawnTarget()
     {
         GameObject target = Instantiate<GameObject>(targetPrefab);
+        target.name = "target"+targetNum;
+        targetNum = targetNum + 1;
         Vector3 pos = Vector3.zero;
         pos.z = z;
         pos.x = getXPos(target);
@@ -45,14 +51,14 @@ public class TargetSpawner : MonoBehaviour
         //Debug.Log("POS :" + pos);
         target.transform.position = pos;
         targetList.Add(target);
-        if (targetList.Count >= MaxTargetsOnScreen)
-        {
-            SceneManager.LoadScene("Scene_0");
-        }
-        else
-        {
-            Invoke("SpawnTarget", delay);
-        }
+  
+        Invoke("SpawnTarget", delay);
+     
+    }
+
+    public void removeTarget(int index)
+    {
+        targetList.RemoveAt(index);
     }
 
     public float getXPos(GameObject target)
