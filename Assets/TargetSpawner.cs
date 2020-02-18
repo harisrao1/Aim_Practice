@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TargetSpawner : MonoBehaviour
 {
@@ -9,12 +10,18 @@ public class TargetSpawner : MonoBehaviour
     public GameObject targetPrefab;
     public float delay;
     public GameObject BackWall;
+    public int MaxTargetsOnScreen;
+    private List<GameObject> targetList;
 
-    public float z = 0.5f;
+    private float WallX = 14f;
+    private float WallY = 8f;
+    
+
+    private float z = -0.5f;
     void Start()
     {
+        targetList = new List<GameObject>();
         Invoke("SpawnTarget", 2f);
-        
     }
 
     // Update is called once per frame
@@ -23,23 +30,39 @@ public class TargetSpawner : MonoBehaviour
        
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
+
     public void SpawnTarget()
     {
         GameObject target = Instantiate<GameObject>(targetPrefab);
-        Vector3 pos = Vector2.zero;
+        Vector3 pos = Vector3.zero;
         pos.z = z;
-        pos.x = getXPos();
-        pos.y = getYPos();
+        pos.x = getXPos(target);
+        pos.y = getYPos(target);
+        //Debug.Log("POS :" + pos);
         target.transform.position = pos;
-        Invoke("SpawnTarget", delay);
+        targetList.Add(target);
+        if (targetList.Count >= MaxTargetsOnScreen)
+        {
+            SceneManager.LoadScene("Scene_0");
+        }
+        else
+        {
+            Invoke("SpawnTarget", delay);
+        }
     }
 
-    public float getXPos()
+    public float getXPos(GameObject target)
     {
-        return 0;
+        //Debug.Log("XXXXX:  " + Random.Range(BackWall.transform.position.x - (WallX / 2) + (target.GetComponent<SphereCollider>().radius * 2), BackWall.transform.position.x + (WallX / 2) - (target.GetComponent<SphereCollider>().radius * 2)));
+        return Random.Range(BackWall.transform.position.x-(WallX/2)+(target.GetComponent<SphereCollider>().radius*2), BackWall.transform.position.x+(WallX/2) - (target.GetComponent<SphereCollider>().radius * 2));
     }
-    public float getYPos()
+    public float getYPos(GameObject target)
     {
-        return 0;
+        //Debug.Log("YYYYY:   " + Random.Range(BackWall.transform.position.y - (WallY / 2) + (target.GetComponent<SphereCollider>().radius * 2), BackWall.transform.position.y + (WallY / 2) - (target.GetComponent<SphereCollider>().radius * 2)));
+        return Random.Range(BackWall.transform.position.y-(WallY/2)+(target.GetComponent<SphereCollider>().radius*2), BackWall.transform.position.y+(WallY/2) - (target.GetComponent<SphereCollider>().radius *2));
     }
 }
