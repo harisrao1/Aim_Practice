@@ -9,6 +9,7 @@ public class TargetSpawner : MonoBehaviour
     // Start is called before the first frame update
     [Header("Set in Insepector")]
     public GameObject targetPrefab;
+    public GameObject colliderPrefab;
     public float delay;
     public GameObject BackWall;
     public int MaxTargetsOnScreen;
@@ -42,13 +43,21 @@ public class TargetSpawner : MonoBehaviour
     public void SpawnTarget()
     {
         GameObject target = Instantiate<GameObject>(targetPrefab);
+   
         target.name = "target"+targetNum;
         targetNum = targetNum + 1;
         Vector3 pos = Vector3.zero;
-        pos.z = z;
-        pos.x = getXPos(target);
-        pos.y = getYPos(target);
-        //Debug.Log("POS :" + pos);
+        var hitColliders = Physics.OverlapSphere(pos, 0.5f);
+        do
+        {
+            pos.z = z;
+            pos.x = getXPos(target);
+            pos.y = getYPos(target);
+            //Debug.Log("POS :" + pos);
+            hitColliders = Physics.OverlapSphere(pos, 0.5f);
+        }
+        while (hitColliders.Length > 0);
+        
         target.transform.position = pos;
         targetList.Add(target);
   
@@ -64,7 +73,11 @@ public class TargetSpawner : MonoBehaviour
     public float getXPos(GameObject target)
     {
         //Debug.Log("XXXXX:  " + Random.Range(BackWall.transform.position.x - (WallX / 2) + (target.GetComponent<SphereCollider>().radius * 2), BackWall.transform.position.x + (WallX / 2) - (target.GetComponent<SphereCollider>().radius * 2)));
-        return Random.Range(BackWall.transform.position.x-(WallX/2)+(target.GetComponent<SphereCollider>().radius*2), BackWall.transform.position.x+(WallX/2) - (target.GetComponent<SphereCollider>().radius * 2));
+       float xval =Random.Range(BackWall.transform.position.x-(WallX/2)+(target.GetComponent<SphereCollider>().radius*2), BackWall.transform.position.x+(WallX/2) - (target.GetComponent<SphereCollider>().radius * 2));
+        
+      
+       return xval;
+    
     }
     public float getYPos(GameObject target)
     {
