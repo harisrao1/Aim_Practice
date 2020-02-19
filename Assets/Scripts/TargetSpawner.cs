@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TargetSpawner : MonoBehaviour
 {
@@ -9,11 +10,12 @@ public class TargetSpawner : MonoBehaviour
     // Start is called before the first frame update
     [Header("Set in Insepector")]
     public GameObject targetPrefab;
-    public GameObject colliderPrefab;
     public float delay;
     public GameObject BackWall;
+    public Text speedGT;
     public int MaxTargetsOnScreen;
     public List<GameObject> targetList;
+    
 
     private float WallX = 14f;
     private float WallY = 8f;
@@ -37,7 +39,9 @@ public class TargetSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        float speed = 1 / delay;
+        speedGT.text = speed + "/s";
+        delay = delay -0.0001f;
     }
 
     public void SpawnTarget()
