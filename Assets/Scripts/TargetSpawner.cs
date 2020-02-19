@@ -10,7 +10,7 @@ public class TargetSpawner : MonoBehaviour
     // Start is called before the first frame update
     [Header("Set in Insepector")]
     public GameObject targetPrefab;
-    public float delay;
+    public float speed;
     public GameObject BackWall;
     public Text speedGT;
     public int MaxTargetsOnScreen;
@@ -39,9 +39,10 @@ public class TargetSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float speed = 1 / delay;
-        speedGT.text = speed + "/s";
-        delay = delay -0.0001f;
+   
+        speedGT.text = speed.ToString("F2") + "/s";
+        speed = speed + 0.002f;
+       
     }
 
     public void SpawnTarget()
@@ -65,7 +66,7 @@ public class TargetSpawner : MonoBehaviour
         target.transform.position = pos;
         targetList.Add(target);
   
-        Invoke("SpawnTarget", delay);
+        Invoke("SpawnTarget", 1/speed);
      
     }
 
