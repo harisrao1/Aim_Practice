@@ -8,11 +8,11 @@ public class HighScore : MonoBehaviour
     static public float score = 1.00f;
     void Awake()
     {
-        if (PlayerPrefs.HasKey("HighScore2"))
+        if (PlayerPrefs.HasKey("HighScore"))
         {
-            score = PlayerPrefs.GetFloat("HighScore2");
+            score = PlayerPrefs.GetFloat("HighScore");
         }
-        PlayerPrefs.SetFloat("HighScore2", score);
+        PlayerPrefs.SetFloat("HighScore", score);
 
     }
 
@@ -21,10 +21,10 @@ public class HighScore : MonoBehaviour
     void Update()
     {
         Text gt = this.GetComponent<Text>();
-        gt.text = "High Score: " + score.ToString("F2");
-        if(score> PlayerPrefs.GetFloat("HighScore2"))
+        gt.text = "High Score: " + score.ToString("F2") +"/s";
+        if(score> PlayerPrefs.GetFloat("HighScore"))
         {
-            PlayerPrefs.SetFloat("HighScore2",score);
+            PlayerPrefs.SetFloat("HighScore",score);
         }
     }
 }

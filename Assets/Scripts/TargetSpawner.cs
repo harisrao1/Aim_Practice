@@ -42,6 +42,10 @@ public class TargetSpawner : MonoBehaviour
    
         speedGT.text = speed.ToString("F2") + "/s";
         speed = speed + 0.002f;
+        if(speed > HighScore.score)
+        {
+            HighScore.score = speed;
+        }
        
     }
 
